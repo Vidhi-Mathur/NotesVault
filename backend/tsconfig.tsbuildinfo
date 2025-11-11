@@ -1,0 +1,1 @@
+{"root":["./src/app.ts","./src/controllers/note-controller.ts","./src/models/note-model.ts","./src/routes/note-route.ts","./src/test/note-integration.test.ts","./src/test/note-unit.test.ts","./src/util/error.ts","./src/util/server.ts"],"version":"5.7.2"}
