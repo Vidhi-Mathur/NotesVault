@@ -43,10 +43,11 @@ describe("Notecards e2e test", () => {
     })
     it("Opens and closes note modal", () => {
         cy.visit("/");
-        cy.get("dialog").should("not.exist");
+        cy.get("dialog").should("not.be.visible");
         cy.contains("Create").click();
+        cy.get("dialog").should("be.visible");
         cy.contains(/create note/i).should("be.visible");
         cy.contains("Cancel").click();
-        cy.get("dialog").should("not.exist");
+        cy.get("dialog").should("not.be.visible");
     })
 })
