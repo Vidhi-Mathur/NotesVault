@@ -1,0 +1,94 @@
+name: CI
+
+# Run on PR, or code pushed to main branch
+on: 
+  pull_request:
+  push: 
+    branches: 
+      - main
+
+# Job = set of steps execute on a single runner (/VM provided by actions), running on linux (cheapest + fastest CI OS)
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    # Set up mongodb , as did in docker
+    services:
+      mongo: 
+        image: mongo:6
+        ports: 
+          - 27017:27017
+        options: >-
+          --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    steps: 
+      # Downloads repo code to VM
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Uses NodeJS 
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Set up backend and run tests
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Perform backend tests
+        working-directory: backend
+        run: npm run test
+
+      # To upload ss/ videos in case of failures
+      - name: Upload backend Jest artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with: 
+          name: backend-jest-artifacts
+          path: backend/coverage
+
+      # Set up frontend and run tests
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Perform frontend tests
+        working-directory: frontend
+        run: npm run test
+
+      # To upload ss/ videos in case of failures
+      - name: Upload frontend Jest artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with: 
+          name: frontend-jest-artifacts
+          path: frontend/coverage
+
+      # Run e2e test
+      - name: Start backend server
+        working-directory: backend
+        run: |
+          npm run build
+          npm start &
+
+      - name: Start frontend server
+        working-directory: frontend
+        run: |
+          npm run build
+          npm start &
+      
+      - name: Wait for services
+        run: npx wait-on http://localhost:5000 http://localhost:3000
+
+      - name: Run cypress e2e tests
+        working-directory: frontend
+        run: npx cypress run --browser chrome
+
+      - name: Upload Cypress artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with: 
+          name: frontend-cypress-artifacts
+          path: frontend/cypress
