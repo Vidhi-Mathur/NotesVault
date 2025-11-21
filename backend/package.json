@@ -5,7 +5,8 @@
   "main": "app.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node src/util/server.js",
+    "start": "node dist/util/server.js",
+    "start:ci": "node dist/util/server.js",
     "dev": "nodemon --watch src --exec ts-node src/util/server.ts",
     "test": "jest"
   },

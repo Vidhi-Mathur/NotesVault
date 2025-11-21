@@ -3,11 +3,10 @@ import cors from 'cors';
 import noteRoutes from './routes/note-route';
 import { errorHandler } from './util/error';
 
-//
 export const app = express()
 
 app.use(cors({
-    origin: "http://localhost:3000"
+    origin: "*"
 }))
 
 app.use(express.json())
