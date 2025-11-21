@@ -21,8 +21,8 @@ describe("Note controller tests", () => {
     beforeEach(async() => {
         await Note.deleteMany({})
     })
-    it("POST /create", async() => {
-        const res = await request(app).post('/create').send({
+    it("POST /", async() => {
+        const res = await request(app).post('/').send({
             title: "Sample Title",
             content: "Sample Content"
         })

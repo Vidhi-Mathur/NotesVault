@@ -129,7 +129,8 @@ describe("Note controller tests", () => {
             id: "123"
         }
         req.body = {
-            title: "Updated title"
+            title: "Updated title",
+            content: "Sample content"
         }
         const mockData = {
             _id: "123",
