@@ -3,6 +3,7 @@ import cors from 'cors';
 import noteRoutes from './routes/note-route';
 import { errorHandler } from './util/error';
 
+//
 export const app = express()
 
 app.use(cors({
