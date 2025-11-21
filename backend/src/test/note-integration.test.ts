@@ -41,6 +41,7 @@ describe("Note controller tests", () => {
         const note = await Note.create({ title: 'Old Sample Title', content: 'Old Sample Content' });
         const res = await request(app).patch(`/update/${note._id}`).send({
             title: "Updated Sample Title",
+            content: "Updated Sample Content"
         })
         expect(res.status).toBe(200)
         expect(res.body.note.title).toBe("Updated Sample Title")
