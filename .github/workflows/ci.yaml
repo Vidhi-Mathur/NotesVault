@@ -11,6 +11,8 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
+    env:
+      MONGODB_URI: mongodb://localhost:27017/notesvault
     # Set up mongodb , as did in docker
     services:
       mongo: 
@@ -80,7 +82,7 @@ jobs:
           npm start &
       
       - name: Wait for services
-        run: npx wait-on http://localhost:5000 http://localhost:3000
+        run: npx wait-on http://localhost:5000 http://localhost:3000 --timeout 20000
 
       - name: Run cypress e2e tests
         working-directory: frontend
