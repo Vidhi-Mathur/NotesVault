@@ -10,6 +10,9 @@ const customJestConfig = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
   },
+  collectCoverage: true,
+  coverageDirectory: "<rootDir>/coverage",
+  coverageProvider: "v8",
 };
 
 export default createJestConfig(customJestConfig);
